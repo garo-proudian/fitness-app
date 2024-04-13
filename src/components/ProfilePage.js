@@ -60,17 +60,17 @@ const ProfilePage = () => {
       });
     }
   }, [user]);
-
   useEffect(() => {
     const fetchDailyIntake = async () => {
-      const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      const today = new Date().toISOString().split('T')[0];
       const user = auth.currentUser;
       if (user) {
         const dailyIntakeRef = ref(database, `users/${user.uid}/dailyIntake/${today}`);
         try {
           const snapshot = await get(dailyIntakeRef);
           if (snapshot.exists()) {
-            setDailyIntake(Object.values(snapshot.val()));
+            const intakeItems = Object.values(snapshot.val());
+            setDailyIntake(intakeItems);
           } else {
             setDailyIntake([]);
           }
@@ -82,40 +82,27 @@ const ProfilePage = () => {
   
     fetchDailyIntake();
   }, [user]);
-
   
-const handleRemove = async (foodItem) => {
-  const user = auth.currentUser;
-  if (!user) {
-    alert('You must be logged in to modify your intake.'); // Consider more user-friendly feedback
-    return;
-  }
-
-  const today = new Date().toISOString().split('T')[0];
-  const dailyIntakePath = `users/${user.uid}/dailyIntake/${today}`;
-
-  try {
-    const dailyIntakeRef = ref(database, dailyIntakePath);
-    const snapshot = await get(dailyIntakeRef);
-    if (snapshot.exists()) {
-      const intakeData = snapshot.val();
-      let keyToRemove = null;
-      Object.entries(intakeData).forEach(([key, value]) => {
-        if (value.id === foodItem.id) { // Ensure 'id' exists and is unique
-          keyToRemove = key;
-        }
-      });
-
-      if (keyToRemove) {
-        await remove(ref(database, `${dailyIntakePath}/${keyToRemove}`));
-        setDailyIntake(dailyIntake.filter((item) => item.id !== foodItem.id)); // Efficient state update
-      }
+  const handleRemoveAll = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert('You must be logged in to modify your intake.');
+      return;
     }
-  } catch (error) {
-    console.error('Error removing food from profile:', error);
-    alert('Failed to remove food from profile.'); // Consider more user-friendly feedback
-  }
-};
+  
+    const today = new Date().toISOString().split('T')[0];
+    const dailyIntakePath = `users/${user.uid}/dailyIntake/${today}`;
+  
+    try {
+      await remove(ref(database, dailyIntakePath));
+      setDailyIntake([]);  // Clear the local state
+      alert('All foods removed from your profile for today.');
+    } catch (error) {
+      console.error('Error removing all foods from profile:', error);
+      alert('Failed to remove all foods from profile.');
+    }
+  };
+
 
   const handleLogout = async () => {
     try {
@@ -173,6 +160,16 @@ const handleRemove = async (foodItem) => {
           <Typography variant="h6" sx={{ mt: 2 }}>
           Total Calories for Today: {totalCalories}
           </Typography>
+          <Grid item xs={12} sm={6}>
+  <Button
+    sx={{ ...defaultButtonStyles(), mt: 2 }}
+    onClick={handleRemoveAll}
+    variant="contained"
+  >
+    Remove All Foods
+  </Button>
+</Grid>
+
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -202,19 +199,19 @@ const handleRemove = async (foodItem) => {
         </Grid>
         <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', marginTop:'30px'}}>Your Selected Foods For Today</Typography>
         <Grid container spacing={2}>
-  {dailyIntake.length > 0 ? (
-    dailyIntake.map((foodItem, index) => (
-      <Grid item key={index} xs={12} sm={6} md={4}>
-        <FoodCard 
-          food={foodItem} 
-          onRemove={handleRemove}
-          // Add any additional props that FoodCard requires
-        />
-      </Grid>
-    ))
-  ) : (
-    <Typography variant="subtitle1">No intake data for today.</Typography>
-  )}
+        {dailyIntake.length > 0 ? (
+  dailyIntake.map((foodItem, index) => (
+    <Grid item key={foodItem.id || index} xs={12} sm={6} md={4}>
+      <FoodCard 
+        food={foodItem}
+      />
+    </Grid>
+  ))
+) : (
+  <Typography variant="subtitle1">No intake data for today.</Typography>
+)}
+
+
 </Grid>
       </Grid>
     </Container>

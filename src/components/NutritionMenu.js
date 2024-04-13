@@ -318,15 +318,16 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
       <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
         <b>Breakfast</b>
         </Typography>
-<Grid container spacing={2}>
+<Grid container spacing={2} justifyContent="center" style={{ maxWidth: '1280px', margin: '0 auto' }}>
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.breakfast && (!showFavorites || food.isFavorite))
     .map((food) => (
-      <Grid item key={food.id} xs={12} sm={6} md={4}>
+      <Grid item key={food.id} xs={12} sm={6} md={4} >
         <FoodCard 
           food={food} 
           onCardClick={handleCardClick} 
-          onToggleFavorite={toggleFavorite} 
+          onToggleFavorite={toggleFavorite}
+          showRemoveButton={false} 
         />
         <Button sx={defaultButtonStyles()} 
           variant="contained" 
@@ -345,7 +346,7 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
   <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
     <b>Lunch</b>
   </Typography>
-<Grid container spacing={2}>
+<Grid container spacing={2} >
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.lunch && (!showFavorites || food.isFavorite))
     .map((food) => (
@@ -354,6 +355,7 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
           food={food} 
           onCardClick={handleCardClick} 
           onToggleFavorite={toggleFavorite} 
+          showRemoveButton={false}
         />
         <Button 
         sx={defaultButtonStyles()}
@@ -382,6 +384,7 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
           food={food} 
           onCardClick={handleCardClick} 
           onToggleFavorite={toggleFavorite} 
+          showRemoveButton={false}
         />
         <Button sx={defaultButtonStyles()} 
           variant="contained" 
@@ -409,6 +412,7 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
           food={food} 
           onCardClick={handleCardClick} 
           onToggleFavorite={toggleFavorite} 
+          showRemoveButton={false}
         />
         <Button sx={defaultButtonStyles()} 
           variant="contained" 

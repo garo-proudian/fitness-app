@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, Typography, CardActions, Button, IconButt
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-const FoodCard = ({ food, onCardClick, onToggleFavorite, onEdit, onRemove }) => {
+const FoodCard = ({ food, onCardClick, onToggleFavorite, onEdit }) => {
   const favoriteIcon = food.isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />;
 
   return (
@@ -41,17 +41,17 @@ const FoodCard = ({ food, onCardClick, onToggleFavorite, onEdit, onRemove }) => 
       </IconButton>
       <CardActions>
         {onEdit && <Button size="small" onClick={() => onEdit(food)}>Edit</Button>}
-        {onRemove && <Button size="small" onClick={() => onRemove(food)}>Remove</Button>}
+
       </CardActions>
     </Card>
   );
 };
 
+
 FoodCard.defaultProps = {
   onCardClick: () => {},
   onToggleFavorite: () => {},
   onEdit: null, // Assuming that not all FoodCards need edit functionality.
-  onRemove: null, // Assuming that not all FoodCards need remove functionality.
 };
 
 export default FoodCard;
