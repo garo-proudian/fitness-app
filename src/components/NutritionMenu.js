@@ -6,6 +6,10 @@ import foodItemsData from './FoodItem'; // Make sure this import path matches yo
 import ProfileButton from './ProfileButton';
 import { get, ref, push } from "firebase/database";
 import { auth, database } from '../Firebase';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const NutritionMenu = () => {
   const [foodItems, setFoodItems] = useState(foodItemsData);
@@ -315,9 +319,13 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
       )}
 
       {/* Breakfast section */}
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
         <b>Breakfast</b>
         </Typography>
+        </AccordionSummary>
+    <AccordionDetails>
 <Grid container spacing={2} justifyContent="center" style={{ maxWidth: '1280px', margin: '0 auto' }}>
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.breakfast && (!showFavorites || food.isFavorite))
@@ -341,12 +349,18 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
     ))
   }
 </Grid>
+</AccordionDetails>
+  </Accordion>
 
       {/* Lunch section */}
+      <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
   <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
     <b>Lunch</b>
   </Typography>
-<Grid container spacing={2} >
+  </AccordionSummary>
+    <AccordionDetails>
+<Grid container spacing={2} justifyContent="center" style={{ maxWidth: '1280px', margin: '0 auto' }}>
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.lunch && (!showFavorites || food.isFavorite))
     .map((food) => (
@@ -370,12 +384,18 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
     ))
   }
 </Grid>
+</AccordionDetails>
+  </Accordion>
 
     {/* Snack section */}
+    <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
     <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
       <b>Snack</b>
       </Typography>
-<Grid container spacing={2}>
+      </AccordionSummary>
+    <AccordionDetails>
+<Grid container spacing={2}justifyContent="center" style={{ maxWidth: '1280px', margin: '0 auto' }}>
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.snak && (!showFavorites || food.isFavorite))
     .map((food) => (
@@ -398,12 +418,18 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
     ))
   }
 </Grid>
+</AccordionDetails>
+  </Accordion>
 
     {/* Dinner section */}
+    <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
     <Typography variant="h4" sx={{mt: 4, mb: 2, letterSpacing:'15px', backgroundColor: '#FFB6B2', color: '#333333', borderRadius: 20, p: 2, textAlign: 'center', Width: '100%' }}>
       <b>Dinner</b>
       </Typography>
-<Grid container spacing={2}>
+      </AccordionSummary>
+    <AccordionDetails>
+<Grid container spacing={2}justifyContent="center" style={{ maxWidth: '1280px', margin: '0 auto' }}>
   {(recommendedFoods.length > 0 ? recommendedFoods : filteredFoodItems)
     .filter(food => food.dinner && (!showFavorites || food.isFavorite))
     .map((food) => (
@@ -426,6 +452,8 @@ if (runningTotal < userCalorieGoal && additionalLunchAdded) { // Use `additional
     ))
   }
 </Grid>
+</AccordionDetails>
+  </Accordion>
 
 <Snackbar
       open={snackbarOpen}

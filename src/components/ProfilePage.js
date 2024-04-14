@@ -7,6 +7,7 @@ import { AuthContext } from '../App'; // Correct path as needed
 import { get, ref, remove, getDatabase } from 'firebase/database';
 import ProfileButton from './ProfileButton';
 import FoodCard from './FoodCard'; // Adjust the path as necessary
+import { Snackbar } from '@mui/material';
 
 
 const ProfilePage = () => {
@@ -17,6 +18,9 @@ const ProfilePage = () => {
   const [totalCalories, setTotalCalories] = useState(0);
   const navigate = useNavigate();
   const { user, setIsLoggedIn } = useContext(AuthContext);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
 
   const defaultButtonStyles = () => ({
     backgroundColor: '#66B2B2',
@@ -86,7 +90,8 @@ const ProfilePage = () => {
   const handleRemoveAll = async () => {
     const user = auth.currentUser;
     if (!user) {
-      alert('You must be logged in to modify your intake.');
+      setSnackbarMessage('You must be logged in to modify your intake.');
+      setSnackbarOpen(true);
       return;
     }
   
@@ -96,10 +101,12 @@ const ProfilePage = () => {
     try {
       await remove(ref(database, dailyIntakePath));
       setDailyIntake([]);  // Clear the local state
-      alert('All foods removed from your profile for today.');
+      setSnackbarMessage('All foods removed from your profile for today.');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error removing all foods from profile:', error);
-      alert('Failed to remove all foods from profile.');
+      setSnackbarMessage('Failed to remove all foods from profile.');
+      setSnackbarOpen(true);
     }
   };
 
@@ -214,7 +221,14 @@ const ProfilePage = () => {
 
 </Grid>
       </Grid>
+      <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={6000}
+      onClose={() => setSnackbarOpen(false)}
+      message={snackbarMessage}
+    />
     </Container>
+    
   );
 };
 
